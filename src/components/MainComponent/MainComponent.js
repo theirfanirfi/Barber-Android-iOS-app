@@ -19,8 +19,7 @@ import CartComponent from '../Cart/CartComponent';
 import WebViewComponent from '../WebViewComponent';
 import Storage from '../../Lib/Storage';
 import Cart from '../../Lib/Cart';
-
-
+import GalleryComponent from '../Gallery/GalleryComponent';
 
 export default class MainComponent extends React.Component{
   constructor(props){
@@ -77,9 +76,9 @@ export default class MainComponent extends React.Component{
   render () {
 
         const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar /> : <MainToolbar/>;
-        let loadComponent = <ProductsComponent productNavCallBack={this.navigationCallBackForProduct} navigation={this.props.navigation} />;
+        let loadComponent = <GalleryComponent navigation={this.props.navigation} />;
         if(this.state.activeTab === 'products'){
-          loadComponent = <ProductsComponent productNavCallBack={this.navigationCallBackForProduct} navigation={this.props.navigation} />;
+          loadComponent = <GalleryComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'categories'){
           loadComponent = <CategoriesComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'account'){

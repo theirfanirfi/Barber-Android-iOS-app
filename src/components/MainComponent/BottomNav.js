@@ -18,30 +18,23 @@ export default class BottomNav extends Component {
     }
     tabs = [
         {
-          key: 'products',
+          key: 'gallery',
           icon: 'home',
-          label: 'Products',
+          label: 'Gallery',
           barColor: '#388E3C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
-          key: 'categories',
+          key: 'makebooking',
           icon: 'line-weight',
-          label: 'Categories',
+          label: 'Make a booking',
           barColor: '#B71C1C',
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
-          key: 'account',
-          icon: 'perm-identity',
-          label: 'My Account',
-          barColor: '#E64A19',
-          pressColor: 'rgba(255, 255, 255, 0.16)'
-        },
-        {
             key: 'cart',
-            icon: 'shopping-cart',
-            label: 'My Cart',
+            icon: 'comment',
+            label: 'My Bookings',
             barColor: '#E64A19',
             pressColor: 'rgba(255, 255, 255, 0.16)'
           }
@@ -49,11 +42,18 @@ export default class BottomNav extends Component {
           ,
           {
             key: 'wishlist',
-            icon: 'favorite-border',
-            label: 'WishList',
+            icon: 'message',
+            label: 'Chat',
             barColor: '#E64A19',
             pressColor: 'rgba(255, 255, 255, 0.16)'
-          }
+          },
+          {
+            key: 'account',
+            icon: 'perm-identity',
+            label: 'My Account',
+            barColor: '#E64A19',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+          },
       ]
      
       renderIcon = icon => ({ isActive }) => (

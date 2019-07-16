@@ -1,13 +1,13 @@
-package com.ecom;
+package com.barber;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -29,10 +29,10 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new RNCWebViewPackage(),
+            new VectorIconsPackage(),
             new RNGestureHandlerPackage(),
             new ReactSliderPackage(),
-            new AsyncStoragePackage(),
-            new VectorIconsPackage()
+            new AsyncStoragePackage()
       );
     }
 
