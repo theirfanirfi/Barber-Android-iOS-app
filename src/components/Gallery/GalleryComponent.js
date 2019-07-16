@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import {View,Text,TouchableOpacity} from 'react-native';
-
+import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet} from 'react-native';
+import Base from '../../Lib/Base';
+import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 export default class GalleryComponent extends Component {
 
+    state = {
+        gallery: [],
+    }
     returnDescription(desc){
         if( desc == null){
             console.log("description is null")
@@ -21,9 +25,16 @@ export default class GalleryComponent extends Component {
     }
 
     async componentDidMount(){
-
+        return fetch(Base.getBaseUrl()+'gallery').then((response) => response.json()).then((res) => {
+            if(res.isFound){
+                console.log(res);
+            this.setState({gallery: res.gallery});
+            }
+           // console.log(res);
+            //this.arrayHolder = res.proudcts;
+        });
     }
-    
+
 returnHeight(){
   if(Platform.OS === 'ios'){
       return responsiveHeight(5);
@@ -50,30 +61,13 @@ returnHeight(){
     return (
 
         <FlatList
-        data={this.state.data}
-        extraData={this.state.isUnFav}
+        data={this.state.gallery}
         renderItem={({ item,index }) => {
             return (
-                <TouchableOpacity style={{ flex:1,flexDirection: 'column' }} onPress={() => this.callBackRes(item.product_id)}>
+                <TouchableOpacity style={{ flex:1,flexDirection: 'column' }} onPress={() => this.callBackRes(item.id)}>
             <View style={{ flex:1,flexDirection: 'column' }} >
-             <Image source={{  uri: item.product_image}} style={style.image}/>
-             <Text style={style.product_title}>{item.product_name}</Text>
-             <View style={{ flex:1,flexDirection: 'row', justifyContent: 'space-between' }} >
-            <Text style={style.pricing}>${item.product_price} </Text>
-         
-            <Icon 
-            name={this.renderIconMode(item.isFav) ? 'favorite': 'favorite-border'}
-            type='material'
-            iconStyle={{flex:1,alignSelf: 'flex-end',marginRight: 12, color: this.renderIconMode(item.isFav) ? 'red' : '#000', }}
-            size={responsiveWidth(6)}
-            onPress={() => this.addToWhishList(this.myRef.current,item.product_id)}
-            ref={this.myRef}
-            />
-
-            </View>
-            
-            {/* <Text style={{ margin:4 }}>{item.product_desc.substr(0,100)+'...'}</Text> */}
-            {this.returnDescription(item.product_desc)}
+             <Image source={{  uri: Base.getWebUrl()+'uploads/gallery/'+item.image_name}} style={style.image}/>
+             <Text style={style.product_title}>{item.image_title}</Text>
             </View>
             </TouchableOpacity>
 
@@ -87,3 +81,32 @@ returnHeight(){
     );
   }
 }
+
+const style = StyleSheet.create({
+    container: {
+        width: '100%',
+        flex:1,
+        justifyContent: 'center',
+        alignContent: 'center',
+    },
+
+    image: {
+        width: '95%',
+        height: responsiveHeight(35),
+        margin: 2,
+    },
+    pricing: {
+        fontSize: responsiveFontSize(1.5),
+        color: '#000',
+        marginLeft: 4,
+        //font: 'bold',
+    },
+
+    product_title: {
+        fontSize: responsiveFontSize(2),
+        color: '#000',
+        marginLeft: 4,
+        //font: 'bold',
+    }
+
+  });

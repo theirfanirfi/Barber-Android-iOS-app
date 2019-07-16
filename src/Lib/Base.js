@@ -1,9 +1,9 @@
 export default {
     getBaseUrl(){
-       return 'http://192.168.10.4/Ecommerce/public/api/';
+       return 'http://192.168.10.6/Barber/public/api/';
     }
     ,
     getWebUrl(){
-       return 'http://192.168.10.4/Ecommerce/public/';
+       return 'http://192.168.10.6/Barber/public/';
     }
 }
