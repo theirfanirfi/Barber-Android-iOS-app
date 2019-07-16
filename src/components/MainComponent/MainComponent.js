@@ -20,6 +20,7 @@ import WebViewComponent from '../WebViewComponent';
 import Storage from '../../Lib/Storage';
 import Cart from '../../Lib/Cart';
 import GalleryComponent from '../Gallery/GalleryComponent';
+import MakeBookingComponent from '../Booking/MakeBookingComponent';
 
 export default class MainComponent extends React.Component{
   constructor(props){
@@ -63,24 +64,24 @@ export default class MainComponent extends React.Component{
 
   }
 
-  renderComponent = () => {
-    if(this.state.activeTab === 'products'){
-      return (
-        <View>
-        <ProductsComponent/>
-        </View>
-      )
-    }
-  }
+  // renderComponent = () => {
+  //   if(this.state.activeTab === 'products'){
+  //     return (
+  //       <View>
+  //       <ProductsComponent/>
+  //       </View>
+  //     )
+  //  }
+  //}
 
   render () {
 
         const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar /> : <MainToolbar/>;
         let loadComponent = <GalleryComponent navigation={this.props.navigation} />;
-        if(this.state.activeTab === 'products'){
+        if(this.state.activeTab === 'gallery'){
           loadComponent = <GalleryComponent navigation={this.props.navigation} />;
-        }else if(this.state.activeTab === 'categories'){
-          loadComponent = <CategoriesComponent navigation={this.props.navigation} />;
+        }else if(this.state.activeTab === 'makebooking'){
+          loadComponent = <MakeBookingComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'account'){
           loadComponent = <SettingsComponent navigation={this.props.navigation}/>;
         }else if(this.state.activeTab === 'cart'){

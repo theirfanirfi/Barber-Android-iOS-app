@@ -2,27 +2,13 @@ import React, { Component } from 'react';
 import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet} from 'react-native';
 import Base from '../../Lib/Base';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
+
 export default class GalleryComponent extends Component {
 
     state = {
         gallery: [],
     }
-    returnDescription(desc){
-        if( desc == null){
-            console.log("description is null")
-        }else {
-            if(desc.length < 100){
-            return (
-<Text style={{ margin:4 }}>{desc}</Text>
-              
-            )
-        }else if(desc.length > 100){
-            return (
-              <Text style={{ margin:4, textAlign:'justify'}}>{desc.substr(0,100)+'...'}</Text>
-            )
-        }
-      }
-    }
+
 
     async componentDidMount(){
         return fetch(Base.getBaseUrl()+'gallery').then((response) => response.json()).then((res) => {
@@ -45,17 +31,6 @@ returnHeight(){
 
 
 
-  renderIconMode = (isFav) => {
-   //   if(this.state.i)
-   if(this.state.isLoggedIn && isFav === 'true'){
-       return true;
-   }else {
-    //console.log('else item is : '+isFav);
-       return false;
-   }
-
-
-  }
 
   render() {
     return (
@@ -74,7 +49,7 @@ returnHeight(){
             )
 
         }}
-        numColumns={2}
+        numColumns={1}
         keyExtractor={(item, index) => index.toString()}
         style={{ marginBottom:responsiveHeight(10), marginTop: this.returnHeight()}}
         />
