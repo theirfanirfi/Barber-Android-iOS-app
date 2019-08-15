@@ -17,13 +17,15 @@ import PaidCheckoutsComponent from './src/components/Checkout/PaidCheckoutsCompo
 import ProductsByUnPaidComponent from './src/components/UnPaid/ProductsByUnPaidComponent';
 import ProductsByPaidComponent from './src/components/PaidCheckouts/ProductsByPaidComponent';
 import BookingFormComponent from './src/components/Booking/BookingFormComponent';
+import MakeBookingComponent from './src/components/Booking/MakeBookingComponent';
 export default class App extends Component {
 
 
   render() { 
     return (
-        // <MApp />
-        <BookingFormComponent />
+         <MApp />
+        // <BookingFormComponent />
+        // <MakeBookingComponent />
     );
   }
 }
@@ -43,7 +45,9 @@ const MainNavigator = createStackNavigator({
   UnPaidCK: {screen: UnpaidCheckout},
   PaidCK: {screen: PaidCheckoutsComponent},
   UnPaidCKProducts: {screen: ProductsByUnPaidComponent},
-  PaidCKProducts: {screen: ProductsByPaidComponent}
+  PaidCKProducts: {screen: ProductsByPaidComponent},
+  MakeBooking: {screen: MakeBookingComponent},
+  BookingForm: {screen: BookingFormComponent}
   },
   {
     initialRouteName: "Home"

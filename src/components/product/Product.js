@@ -33,7 +33,7 @@ export default class Product extends Component {
     async componentDidMount(){
         let BASE_URL = Base.getBaseUrl();
         let id = this.props.navigation.getParam('product_id');
-        console.log(id)
+        
         return fetch(BASE_URL+'product/'+id).then(response => response.json()).then((res) => {
             if(res.isError){
                 alert(res.message);

@@ -1,22 +1,222 @@
 import React, { Component } from 'react';
-import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet} from 'react-native';
+import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet,ScrollView} from 'react-native';
 import Base from '../../Lib/Base';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { ListItem } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
+import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
+import LinearGradient from 'react-native-linear-gradient'; // Only if no expo
+import DialogComponent from '../Reusable/DialogComponent';
+
+
 export default class MakeBookingComponent extends Component {
+
+
+  constructor(props){
+    super(props);
+    this.arrayHolder = {};
+}
+  state = {
+    day: '',
+    month: '',
+    year: '',
+    date: '',
+    day_list: 1,
+    appointments_list: [],
+    refereshFlatList: true,
+    days_booked: [],
+    marked: null,
+    dialogVisibility: false,
+  }
+
+  anotherFunc = () => {
+    var obj = this.state.days_booked.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true}}), {});
+    this.setState({ marked : obj});
+}
+  async componentDidMount(){
+    this.setTodayDateToState();
+    await fetch(Base.getBaseUrl()+'user/getappointmentsfortheday?d='+this.state.day
+    +'&m='+this.state.month
+    +'&y='+this.state.year).then(response => response.json()).then(res => {
+      this.setState({
+        appointments_list: res.timings,
+      });
+    });
+
+    await fetch(Base.getBaseUrl()+'user/getcurrentmonthappointments?&m=07'
+    +'&y=2019').then(response => response.json()).then(res => {
+      if(res.isFound){
+
+        // console.log(res.bookings);
+        this.arrayHolder = res.bookings.map((e,i) => {
+          //console.log(e.dday);
+         // return "'"+e.dday+"'"+ ":{selected: true, marked: true,selectedColor: 'red'},";
+         return e.dday;
+        });
+
+        this.setState({
+          days_booked: this.arrayHolder,
+        });
+
+        // this.state.days_booked.forEach((day) => {
+        // console.log(day);
+        // })
+        //console.log(this.arrayHolder);
+
+      }
+
+    });
+
+    this.anotherFunc();
+  }
+
+  dialogCallback = action => {
+    if(action === 'cancel'){
+      this.setState({
+        dialogVisibility: false,
+      })
+    }else {
+      this.setState({
+        dialogVisibility: false,
+      })
+    }
+  }
+
+  getTodayDate() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    
+    today = yyyy +  '-'+mm + '-'  + dd;
+    // this.setState({
+    //   day: dd,
+    //   month: mm,
+    //   year: yyyy
+    // });
+
+    return today;
+  }
+
+  setTodayDateToState() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    this.setState({
+      day: dd,
+      month: mm,
+      year: yyyy
+    });
+  }
+
+   getSelectedDayAppointments(day, month, year){
+   
+     fetch(Base.getBaseUrl()+'user/getappointmentsfortheday?d='+day
+    +'&m='+month
+    +'&y='+year).then(response => response.json()).then(res => {
+      this.setState({
+        appointments_list: res.timings,
+        refereshFlatList: !this.state.refereshFlatList,
+      });
+    });
+  }
+
+  returnIcon(item){
+    if(item.timing_id == null){
+      return (
+        <Icon name='plus'
+         type='evilicon'
+         color="gray" />
+      )
+    }else {
+      return (
+        <Icon name='check'
+         type='evilicon'
+         color="green" />
+      );
+    }
+  }
+
+  isBooked(item){
+    if(item.timing_id == null){
+      return '';
+    }else {
+      return 'Time is booked';
+    }
+  }
+
+  timeClickedShowDialog(){
+    this.setState({
+      dialogVisibility: !this.state.dialogVisibility
+    });
+  }
+
+  returnDaysToCalendarForMarking(){
+    this.arrayHolder = this.state.days_booked.map((day,index) => {
+     // return '2019-07-25': { selected: true, marked: true,selectedColor: 'red'};
+    });
+ 
+
+    let st =  JSON.stringify(this.arrayHolder);
+    console.log(st);
+
+    
+    return st;
+  }
+
+  keyExtractor = (item, index) => index.toString();
+
+  returnListItem = ({item,i}) => {
+    return (
+      <ListItem
+        key={i}
+        title={item.time_range}
+        subtitle={this.isBooked(item)}
+        subtitleStyle={{color: 'gray', fontSize: 13}}
+        leftIcon={{name: 'av-timer'}}
+        // rightIcon={{ name: this.returnIcon(item), color:'green', type:'material' }}
+        rightIcon={this.returnIcon(item) }
+  
+  
+        Component={TouchableScale}
+        friction={90} //
+        tension={100} // These props are passed to the parent component (here TouchableScale)
+        activeScale={0.95} //
+        // leftAvatar={{ rounded: true, source: { uri: avatar_url } }}
+        // title="Chris Jackson"
+        titleStyle={{ color: 'black', fontWeight: 'bold' }}
+        subtitleStyle={{ color: 'gray' }}
+        // subtitle="Vice Chairman"
+        chevronColor="gray"
+        //disabled={true}
+        //chevron
+        onPress={() => this.timeClickedShowDialog()}
+      />
+    
+ 
+    );
+  }
+
+
+
   render() {
     return (
-      <View style={{marginTop:40}}>
+<View style={{marginTop:40,height: responsiveHeight(90)}}>
 <CalendarList
   // Initially visible month. Default = Date()
-  current={'2019-07-16'}
+  current={this.getTodayDate()}
   horizontal={true}
   // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
   minDate={'2012-05-10'}
   // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
   maxDate={'2022-05-30'}
   // Handler which gets executed on day press. Default = undefined
-  onDayPress={(day) => { alert(day.dateString)}}
+  onDayPress={(day) => { 
+   this.getSelectedDayAppointments(day.day,day.month, day.year);
+    //this.props.navigation.navigate('BookingForm',{day: day.day, month: day.month, year: day.year});
+  }}
   // Handler which gets executed on day long press. Default = undefined
   onDayLongPress={(day) => {alert(day)}}
   // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -42,12 +242,8 @@ export default class MakeBookingComponent extends Component {
   onPressArrowLeft={substractMonth => substractMonth()}
   // Handler which gets executed when press arrow icon left. It receive a callback can go next month
   onPressArrowRight={addMonth => addMonth()}
-  markedDates={{
-    '2019-07-16': {selected: true, marked: true, selectedColor: 'blue'},
-    // '2012-05-17': {marked: true},
-    // '2012-05-18': {marked: true, dotColor: 'red', activeOpacity: 0},
-    // '2012-05-19': {disabled: true, disableTouchEvent: true}
-  }}
+
+  markedDates={this.state.marked}
 
   theme={{
     backgroundColor: '#fff',
@@ -74,6 +270,25 @@ export default class MakeBookingComponent extends Component {
     textDayHeaderFontSize: 16
   }}
 />
+<Text style={{alignSelf:'center'}}>Book an appointment</Text>
+{/* <ScrollView style={{height: responsiveHeight(40)}}>
+{
+  this.state.appointments_list.map((item, i) => (
+    this.returnListItem(item,i)
+  ))
+}
+</ScrollView> */}
+
+<FlatList
+extraData={this.state.refereshFlatList}
+      keyExtractor={this.keyExtractor}
+      data={this.state.appointments_list}
+      renderItem={this.returnListItem}
+    />
+{/* //this.state.dialogVisibility */}
+
+<DialogComponent callBack={this.dialogCallback} dialogVisibility={this.state.dialogVisibility} />
+
       </View>
     );
   }
