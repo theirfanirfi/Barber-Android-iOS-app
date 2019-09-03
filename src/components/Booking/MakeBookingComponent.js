@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet,ScrollView} from 'react-native';
 import Base from '../../Lib/Base';
+import Storage from '../../Lib/Storage';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import { ListItem } from 'react-native-elements'
@@ -28,13 +29,26 @@ export default class MakeBookingComponent extends Component {
     days_booked: [],
     marked: null,
     dialogVisibility: false,
+    timing_id: null,
+    isLoggedIn: false,
+    user:[],
+    selectedDay: null,
+    selectedMonth: null,
+    selectedYear: null,
+    monthAppointmensMonth: null,
+    monthAppointmensYear: null,
+    scrollMonth: null,
   }
 
   anotherFunc = () => {
-    var obj = this.state.days_booked.reduce((c, v) => Object.assign(c, {[v]: {selected: true,marked: true}}), {});
+    console.log(this.state.days_booked);
+    // var obj = this.state.days_booked.reduce((c, v) => Object.assign(c, {[v]: {marked: true, selected: true, dotColor: 'red'}}), {});
+    var obj = this.state.days_booked.reduce((c, v) => Object.assign(c, {[v]: {marked: true, selected: true, dotColor: 'red'}}), {});
+    console.log(obj);
     this.setState({ marked : obj});
 }
   async componentDidMount(){
+    Storage.isLoggedIn(this);
     this.setTodayDateToState();
     await fetch(Base.getBaseUrl()+'user/getappointmentsfortheday?d='+this.state.day
     +'&m='+this.state.month
@@ -44,8 +58,8 @@ export default class MakeBookingComponent extends Component {
       });
     });
 
-    await fetch(Base.getBaseUrl()+'user/getcurrentmonthappointments?&m=07'
-    +'&y=2019').then(response => response.json()).then(res => {
+    await fetch(Base.getBaseUrl()+'user/getcurrentmonthappointments?&m='+this.state.month
+    +'&y='+this.state.year).then(response => response.json()).then(res => {
       if(res.isFound){
 
         // console.log(res.bookings);
@@ -71,10 +85,43 @@ export default class MakeBookingComponent extends Component {
     this.anotherFunc();
   }
 
+
+  async getAppointmentsForMonth(month, year) {
+    await fetch(Base.getBaseUrl()+'user/getcurrentmonthappointments?&m='+month
+    +'&y='+year).then(response => response.json()).then(res => {
+      if(res.isFound){
+
+        // console.log(res.bookings);
+        this.arrayHolder = res.bookings.map((e,i) => {
+          //console.log(e.dday);
+         // return "'"+e.dday+"'"+ ":{selected: true, marked: true,selectedColor: 'red'},";
+         return e.dday;
+        });
+
+        this.setState({
+          days_booked: this.arrayHolder,
+        });
+
+        // this.state.days_booked.forEach((day) => {
+        // console.log(day);
+        // })
+        //console.log(this.arrayHolder);
+
+      }
+
+    }).then(() => {
+      //alert('working');
+    this.anotherFunc();
+
+    });
+  }
+
   dialogCallback = action => {
     if(action === 'cancel'){
       this.setState({
         dialogVisibility: false,
+      }, () => {
+        this.getSelectedDayAppointments(this.state.selectedDay,this.state.selectedMonth,this.state.selectedYear);
       })
     }else {
       this.setState({
@@ -107,7 +154,11 @@ export default class MakeBookingComponent extends Component {
     this.setState({
       day: dd,
       month: mm,
-      year: yyyy
+      year: yyyy,
+      selectedDay: dd,
+      selectedMonth: mm,
+      selectedYear: yyyy,
+      scrollMonth: mm,
     });
   }
 
@@ -147,10 +198,11 @@ export default class MakeBookingComponent extends Component {
     }
   }
 
-  timeClickedShowDialog(){
+  timeClickedShowDialog = id => {
     this.setState({
-      dialogVisibility: !this.state.dialogVisibility
-    });
+      dialogVisibility: !this.state.dialogVisibility,
+      timing_id: id,
+    });    
   }
 
   returnDaysToCalendarForMarking(){
@@ -192,7 +244,9 @@ export default class MakeBookingComponent extends Component {
         chevronColor="gray"
         //disabled={true}
         //chevron
-        onPress={() => this.timeClickedShowDialog()}
+        onPress={() => {
+          this.timeClickedShowDialog(item.id)
+        }}
       />
     
  
@@ -215,6 +269,11 @@ export default class MakeBookingComponent extends Component {
   // Handler which gets executed on day press. Default = undefined
   onDayPress={(day) => { 
    this.getSelectedDayAppointments(day.day,day.month, day.year);
+   this.setState({
+     selectedDay: day.day,
+     selectedMonth: day.month,
+     selectedYear: day.year,
+   });
     //this.props.navigation.navigate('BookingForm',{day: day.day, month: day.month, year: day.year});
   }}
   // Handler which gets executed on day long press. Default = undefined
@@ -222,9 +281,19 @@ export default class MakeBookingComponent extends Component {
   // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
   monthFormat={'yyyy MM'}
   // Handler which gets executed when visible month changes in calendar. Default = undefined
-  onMonthChange={(month) => {console.log('month changed', month)}}
+  onMonthChange={(month) => {alert(month)}}
   // Hide month navigation arrows. Default = false
-  hideArrows={true}
+  //hideArrows={false}
+  onVisibleMonthsChange={(months) => { 
+    if(months[0].month != this.state.scrollMonth){
+      this.setState({
+        scrollMonth: months[0].month,
+      }, () => {
+      this.getAppointmentsForMonth(months[0].month,months[0].year);
+      })
+    }
+
+  }}
   // Replace default arrows with custom ones (direction can be 'left' or 'right')
   renderArrow={(direction) => (<Arrow />)}
   // Do not show days of other months in month page. Default = false
@@ -243,7 +312,14 @@ export default class MakeBookingComponent extends Component {
   // Handler which gets executed when press arrow icon left. It receive a callback can go next month
   onPressArrowRight={addMonth => addMonth()}
 
-  markedDates={this.state.marked}
+   markedDates={this.state.marked}
+
+  // markedDates={{
+  //   '2019-09-01': {selected: true, marked: true, selectedColor: 'yellow'},
+  //   '2019-09-02': {marked: true},
+  //   '2012-05-18': {marked: true, dotColor: 'red', activeOpacity: 0},
+  //   '2012-05-19': {disabled: true, disableTouchEvent: true}
+  // }}
 
   theme={{
     backgroundColor: '#fff',
@@ -287,7 +363,7 @@ extraData={this.state.refereshFlatList}
     />
 {/* //this.state.dialogVisibility */}
 
-<DialogComponent callBack={this.dialogCallback} dialogVisibility={this.state.dialogVisibility} />
+<DialogComponent day={this.state.selectedDay} month={this.state.selectedMonth} year={this.state.selectedYear} timing_id={this.state.timing_id} callBack={this.dialogCallback} dialogVisibility={this.state.dialogVisibility} />
 
       </View>
     );

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {View,Text} from 'react-native'
+import {View,Text,Alert} from 'react-native'
 import Dialog from "react-native-dialog";
 import { Dropdown } from 'react-native-material-dropdown';
 import Button from 'apsl-react-native-button'
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import PropTypes from 'prop-types';
 import Base from '../../Lib/Base';
-
+import Storage from '../../Lib/Storage';
 export default class DilogComponent extends Component {
     constructor(props){
         super(props);
@@ -17,6 +17,10 @@ export default class DilogComponent extends Component {
     static = {
         dialogVisibility: PropTypes.bool,
         callBack: PropTypes.func,
+        timing_id: PropTypes.string,
+        day: PropTypes.string,
+        month: PropTypes.string,
+        year: PropTypes.string,
     };
 
     state = {
@@ -24,25 +28,54 @@ export default class DilogComponent extends Component {
         services: [],
         services_names: [],
         selectedService: '',
-        data: [{
-            value: 'Banana',
-          }, {
-            value: 'Mango',
-          }, {
-            value: 'Pear',
-            id: 22,
-          }]
+        service_cost: '',
+        selectedServiceId: 0,
+        isLoggedIn: false,
+        user: [],
+        timing_id: null,
+    }
+
+    alertInfo = (title, msg, btn) => {
+      Alert.alert(
+        title,
+        msg,
+        [
+          {
+            text: btn,
+            onPress: () => this.cancelBooking(),
+            style: 'cancel',
+          }
+        ],
+        {cancelable: false},
+      );
     }
 
     async book() {
-        fetch(Base.getBaseUrl()+"user/bookappointment?day="+this.state.day+
-        "&month="+this.state.month+
-        "&year="+this.state.year+
-        "&time="+this.state.time+"&token=$2y$10$ryl9Vkt5jec5nvX7cNtPT.JFhacP3XihySlc9LXOi4jUYpWQX4mWe&service_id=1")
-        .then((res) => res.json()).then(response => {
-          console.log(response);
-        });
-        //alert(this.state.day+ " : "+this.state.month+" : "+this.state.year+" : "+this.state.time);
+
+      if(this.state.isLoggedIn){
+       // alert(this.props.day+ " : "+this.props.month+" : "+this.props.year+" : "+this.props.timing_id+" : "+this.state.selectedServiceId);
+
+       fetch(Base.getBaseUrl()+"user/bookappointment?day="+this.props.day+
+       "&month="+this.props.month+
+       "&year="+this.props.year+
+       "&time="+this.props.timing_id+"&token="+this.state.user.token+"&service_id="+this.state.selectedServiceId)
+       .then((res) => res.json()).then(response => {
+         if(response.isError){
+           alert(response.message);
+         }else if(response.isAlreadyTaken){
+          this.alertInfo("Sorry",response.message,"Cancel");
+         }else if(response.isBooked){
+          this.alertInfo("Success",response.message,"Ok");
+
+         }else {
+          alert(response.message);
+         }
+       });
+
+      }else {
+        alert("Please login to continue.");
+      }
+
       }
 
       cancelBooking = () => {
@@ -51,30 +84,35 @@ export default class DilogComponent extends Component {
 
       async componentDidUpdate(){
         if(this.props.dialogVisibility){
-            fetch(Base.getBaseUrl()+"user/getservices")
-            .then(response => response.json())
-            .then(res => {
-                if(res.isFound){
-                    let arr = [];
-                    res.services.forEach((e,i) => {
-                       // console.log(e.service_name);
-                    arr.push({'value': e.service_name});
-                    });
-                   // console.log(arr);
 
-                    this.setState({
-                        services: res.services,
-                        services_names: arr,
-                    })
-                }else {
-                    alert('The barber does not offer any serives.');
-                    // this.setState({
-                    //     dialogVisibility: false
-                    // })
-                }
-            });
         }
     
+      }
+      async componentDidMount(){
+        Storage.isLoggedIn(this);
+        fetch(Base.getBaseUrl()+"user/getservices")
+        .then(response => response.json())
+        .then(res => {
+            if(res.isFound){
+                let arr = [];
+                res.services.map((e,i) => {
+                   // console.log(e.service_name);
+                arr.push({'value': e.service_name,'id': e.id,'cost': e.service_cost}  );
+                });
+                console.log(arr);
+
+                this.setState({
+                    services: res.services,
+                    services_names: arr,
+                });
+                
+            }else {
+               // alert('The barber does not offer any serives.');
+                // this.setState({
+                //     dialogVisibility: false
+                // })
+            }
+        });
       }
 
   render() {
@@ -93,14 +131,17 @@ export default class DilogComponent extends Component {
         itemTextStyle={{alignSelf:'center',alignItems:'center'}}
         overlayStyle={{alignSelf:'center'}}
         data={this.state.services_names}
-        onChangeText={(text,index) => {
+        onChangeText={(value,index,cost) => {
+            //console.log(cost[index].cost);
             this.setState({
-                selectedService: text,
+                selectedService: value,
+                selectedServiceId: cost[index].id,
+                service_cost: cost[index].cost,
             })
         }}
        
       />
-
+<Text style={{alignSelf:'center'}}>Cost: {this.state.service_cost}$s</Text>
 <Button onPress={() => this.book()} style={{ backgroundColor: '#34D27C', marginTop:responsiveHeight(2),width: responsiveWidth(50),alignSelf:'center',color:'#fff'}} textStyle={{fontSize: 18}}>
 <Text style={{ color:'#fff' }}> Book Appointment</Text>
 </Button>
