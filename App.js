@@ -18,6 +18,7 @@ import ProductsByUnPaidComponent from './src/components/UnPaid/ProductsByUnPaidC
 import ProductsByPaidComponent from './src/components/PaidCheckouts/ProductsByPaidComponent';
 import BookingFormComponent from './src/components/Booking/BookingFormComponent';
 import MakeBookingComponent from './src/components/Booking/MakeBookingComponent';
+import MyBookingComponent from './src/components/Booking/MyBookingComponent';
 export default class App extends Component {
 
 
@@ -47,7 +48,8 @@ const MainNavigator = createStackNavigator({
   UnPaidCKProducts: {screen: ProductsByUnPaidComponent},
   PaidCKProducts: {screen: ProductsByPaidComponent},
   MakeBooking: {screen: MakeBookingComponent},
-  BookingForm: {screen: BookingFormComponent}
+  BookingForm: {screen: BookingFormComponent},
+  MyBooking: {screen: MyBookingComponent}
   },
   {
     initialRouteName: "Home"

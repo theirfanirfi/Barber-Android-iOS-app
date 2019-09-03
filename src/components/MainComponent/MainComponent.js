@@ -21,6 +21,7 @@ import Storage from '../../Lib/Storage';
 import Cart from '../../Lib/Cart';
 import GalleryComponent from '../Gallery/GalleryComponent';
 import MakeBookingComponent from '../Booking/MakeBookingComponent';
+import MyBookingComponent from '../Booking/MyBookingComponent';
 
 export default class MainComponent extends React.Component{
   constructor(props){
@@ -84,8 +85,8 @@ export default class MainComponent extends React.Component{
           loadComponent = <MakeBookingComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'account'){
           loadComponent = <SettingsComponent navigation={this.props.navigation}/>;
-        }else if(this.state.activeTab === 'cart'){
-          loadComponent = <CartComponent navigation={this.props.navigation} />
+        }else if(this.state.activeTab === 'mybookings'){
+          loadComponent = <MyBookingComponent navigation={this.props.navigation} />
         }else if(this.state.activeTab === 'wishlist'){
           loadComponent = <WishList navigation={this.props.navigation} />
         }

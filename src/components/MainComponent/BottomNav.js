@@ -32,8 +32,8 @@ export default class BottomNav extends Component {
           pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
-            key: 'cart',
-            icon: 'comment',
+            key: 'mybookings',
+            icon: 'av-timer',
             label: 'My Bookings',
             barColor: '#E64A19',
             pressColor: 'rgba(255, 255, 255, 0.16)'
