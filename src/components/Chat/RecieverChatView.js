@@ -5,14 +5,37 @@ import Storage from '../../Lib/Storage';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
-
+import ExampleComponent from "react-rounded-image";
 export default class RecieverChatView extends Component {
+    state = {
+        isLoggedIn: false,
+        user: [],
+    }
+
+    static = {
+        msg: PropTypes.string,
+    }
+    constructor(props){
+        super(props);
+        Storage.isLoggedIn(this);
+    }
     render() {
         return ( 
-            <View style={style.view}>
+            <View style={{alignSelf:'flex-start', alignItems:'flex-start',flexDirection:'row'}}>
+
+<Image
+        
+        source={{uri: this.state.user.profile_image}}
+        style={{width: 40, height: 40,borderRadius:20,alignSelf:'flex-start'}}
+      />
+<View style={style.view}>
                 <Text style={style.text}>
-                    I am fine, and ready. What are you doing buddy?
+                   {this.props.msg}
                 </Text>
+</View>
+
+           
+
             </View>
         );
     }
@@ -26,8 +49,8 @@ view: {
     backgroundColor: 'lightgray',
     borderRadius: 30,
     borderBottomLeftRadius: 0,
-    padding:12,
-    margin:4,
+    padding:10,
+    margin:8,
 },
 text : {
     color: 'black',

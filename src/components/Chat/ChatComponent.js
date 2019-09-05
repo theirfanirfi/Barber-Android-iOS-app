@@ -3,10 +3,11 @@ import {View,Text,TouchableOpacity,FlatList,Platform,Image,StyleSheet,ScrollView
 import Base from '../../Lib/Base';
 import Storage from '../../Lib/Storage';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
-import { Icon } from 'react-native-elements';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { Icon,Input } from 'react-native-elements';
+import { GiftedChat, Send } from 'react-native-gifted-chat'
 import RecieverChatView from './RecieverChatView';
 import SenderChatView from './SenderChatView';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 
@@ -23,9 +24,20 @@ export default class ChatComponent extends Component {
     year: '',
     date: '',
     refereshFlatList: true,
-    messages: [],
+    typeMessage: '',
+    messages: [
+      {
+        id: 1,
+        text: 'How are you?'
+      },
+      {
+        id: 2,
+        text: 'I am fine'
+      }
+    ],
     isLoggedIn: false,
     user:[],
+
 
   }
 
@@ -78,20 +90,54 @@ export default class ChatComponent extends Component {
  
 
 
-  onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+ sendMessage = () => {
+alert(this.state.typeMessage);
+ }
+
+  renderChat = ({item,i}) => {
+    let renderChat = <SenderChatView msg={item.text} />
+    if(item.id == 1){
+      renderChat = <SenderChatView msg={item.text} />
+    }else {
+      renderChat = <RecieverChatView msg={item.text}  />
+    }
+
+    return (
+      <View style={{ transform: [{ scaleY: -1 }]}}>
+        {renderChat}
+      </View>
+    );
+
   }
  
 
-
+  _keyExtractor = (item, index) => item.id+''+index;
 
   render() {
     return (
-<View style={{marginTop:40,height: responsiveHeight(85),padding:20}}>
-  <SenderChatView />
-  <RecieverChatView />
+<View style={{marginTop:40,height: responsiveHeight(85),padding:6}}>
+  <FlatList 
+  keyExtractor={this._keyExtractor}
+  data={this.state.messages}
+  renderItem={this.renderChat}
+  style={{  transform: [{ scaleY: -1 }] }}
+  />
+
+<Input
+  placeholder='Type message here'
+  value={this.typeMessage}
+  onChangeText={(text) => this.setState({typeMessage: text})}
+  rightIcon={
+    <Icon
+      name='send'
+      type='material'
+      size={24}
+      color='black'
+      onPress={() => this.sendMessage()}
+    />
+  }
+/>
+
       </View>
     );
   }

@@ -1,19 +1,46 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Platform, Image, StyleSheet, ScrollView } from 'react-native';
-import Base from '../../Lib/Base';
 import Storage from '../../Lib/Storage';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
-
+import ExampleComponent from "react-rounded-image";
 export default class SenderChatView extends Component {
+
+    static = {
+        msg: PropTypes.string,
+    }
+    state = {
+        isLoggedIn: false,
+        user: [],
+    }
+    constructor(props){
+        super(props);
+        Storage.isLoggedIn(this);
+    }
     render() {
         return ( 
-            <View style={style.view}>
+
+            <View style={{alignSelf:'flex-end', alignItems:'flex-end',flexDirection:'row'}}>
+
+          
+<View style={style.view}>
+
                 <Text style={style.text}>
-                    How are you buddy? are you ready?
+                    {this.props.msg}
                 </Text>
+
+                
+</View>
+                <Image
+        
+        source={{uri: this.state.user.profile_image}}
+        style={{width: 40, height: 40,borderRadius:20,alignSelf:'flex-end'}}
+      />
+           
+
             </View>
+
         );
     }
 }
@@ -21,15 +48,16 @@ export default class SenderChatView extends Component {
 const style = StyleSheet.create({
 view: {
     alignSelf: 'flex-end',
-    alignContent: 'flex-end',
     alignItems: 'flex-end',
+    flexDirection:'row',
     backgroundColor: 'blue',
-    borderRadius: 30,
+    borderRadius: 20,
     borderBottomRightRadius: 0,
-    padding: 12,
-    margin: 4,
+    padding: 10,
+    margin: 8,
 },
 text : {
+
     color: 'white',
 }
 });
