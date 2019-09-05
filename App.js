@@ -19,6 +19,7 @@ import ProductsByPaidComponent from './src/components/PaidCheckouts/ProductsByPa
 import BookingFormComponent from './src/components/Booking/BookingFormComponent';
 import MakeBookingComponent from './src/components/Booking/MakeBookingComponent';
 import MyBookingComponent from './src/components/Booking/MyBookingComponent';
+import ChatComponent from './src/components/Chat/ChatComponent';
 export default class App extends Component {
 
 
@@ -49,7 +50,8 @@ const MainNavigator = createStackNavigator({
   PaidCKProducts: {screen: ProductsByPaidComponent},
   MakeBooking: {screen: MakeBookingComponent},
   BookingForm: {screen: BookingFormComponent},
-  MyBooking: {screen: MyBookingComponent}
+  MyBooking: {screen: MyBookingComponent},
+  Chat: {screen: ChatComponent}
   },
   {
     initialRouteName: "Home"

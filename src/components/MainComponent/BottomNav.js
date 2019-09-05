@@ -41,7 +41,7 @@ export default class BottomNav extends Component {
 
           ,
           {
-            key: 'wishlist',
+            key: 'chat',
             icon: 'message',
             label: 'Chat',
             barColor: '#E64A19',

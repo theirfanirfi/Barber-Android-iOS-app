@@ -22,6 +22,7 @@ import Cart from '../../Lib/Cart';
 import GalleryComponent from '../Gallery/GalleryComponent';
 import MakeBookingComponent from '../Booking/MakeBookingComponent';
 import MyBookingComponent from '../Booking/MyBookingComponent';
+import ChatComponent from '../Chat/ChatComponent';
 
 export default class MainComponent extends React.Component{
   constructor(props){
@@ -83,8 +84,8 @@ export default class MainComponent extends React.Component{
           loadComponent = <GalleryComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'makebooking'){
           loadComponent = <MakeBookingComponent navigation={this.props.navigation} />;
-        }else if(this.state.activeTab === 'account'){
-          loadComponent = <SettingsComponent navigation={this.props.navigation}/>;
+        }else if(this.state.activeTab === 'chat'){
+          loadComponent = <ChatComponent navigation={this.props.navigation}/>;
         }else if(this.state.activeTab === 'mybookings'){
           loadComponent = <MyBookingComponent navigation={this.props.navigation} />
         }else if(this.state.activeTab === 'wishlist'){
