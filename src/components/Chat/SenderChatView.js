@@ -8,7 +8,7 @@ import ExampleComponent from "react-rounded-image";
 export default class SenderChatView extends Component {
 
     static = {
-        msg: PropTypes.string,
+        msgObj: PropTypes.object,
     }
     state = {
         isLoggedIn: false,
@@ -27,7 +27,7 @@ export default class SenderChatView extends Component {
 <View style={style.view}>
 
                 <Text style={style.text}>
-                    {this.props.msg}
+                    {this.props.msgObj.msg}
                 </Text>
 
                 

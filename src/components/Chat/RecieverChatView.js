@@ -13,7 +13,7 @@ export default class RecieverChatView extends Component {
     }
 
     static = {
-        msg: PropTypes.string,
+        msgObj: PropTypes.object,
     }
     constructor(props){
         super(props);
@@ -30,7 +30,7 @@ export default class RecieverChatView extends Component {
       />
 <View style={style.view}>
                 <Text style={style.text}>
-                   {this.props.msg}
+                   {this.props.msgObj.msg}
                 </Text>
 </View>
 
