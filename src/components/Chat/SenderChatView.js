@@ -20,6 +20,8 @@ export default class SenderChatView extends Component {
     }
     render() {
         return ( 
+<View style={{marginTop:20}}>
+    <Text style={{alignSelf:'flex-end',marginRight:10,fontSize:10,color:'gray'}}>06: 00 am</Text>
 
             <View style={{alignSelf:'flex-end', alignItems:'flex-end',flexDirection:'row'}}>
 
@@ -39,6 +41,7 @@ export default class SenderChatView extends Component {
       />
            
 
+            </View>
             </View>
 
         );

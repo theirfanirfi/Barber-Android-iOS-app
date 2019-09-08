@@ -66,6 +66,7 @@ export default class ChatComponent extends Component {
       .finally(() => {
         this.timer = setInterval(() => {
           this.getMessages();
+          console.log('timer called')
         }, 4000);
       });
     });
@@ -102,22 +103,6 @@ export default class ChatComponent extends Component {
 
 
   
-
-  setTodayDateToState() {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    this.setState({
-      day: dd,
-      month: mm,
-      year: yyyy,
-      selectedDay: dd,
-      selectedMonth: mm,
-      selectedYear: yyyy,
-      scrollMonth: mm,
-    });
-  }
 
 
 
@@ -164,7 +149,7 @@ async sendMessage() {
 
   renderChat = ({item,i}) => {
     let user_id = this.state.user.id;
-    let renderChat = <SenderChatView msgObj={item} />
+    let renderChat = <SenderChatView msgObj={item}  />
     if(item.sender_id == user_id){
       renderChat = <SenderChatView msgObj={item} />
     }else {

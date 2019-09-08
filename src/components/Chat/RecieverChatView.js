@@ -21,6 +21,9 @@ export default class RecieverChatView extends Component {
     }
     render() {
         return ( 
+            <View>
+    <Text style={{alignSelf:'flex-start',marginLeft:10,marginBottom:4,marginTop:20,fontSize:10,color:'gray'}}>06: 00 am</Text>
+
             <View style={{alignSelf:'flex-start', alignItems:'flex-start',flexDirection:'row'}}>
 
 <Image
@@ -36,6 +39,7 @@ export default class RecieverChatView extends Component {
 
            
 
+            </View>
             </View>
         );
     }
