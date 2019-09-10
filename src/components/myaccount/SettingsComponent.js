@@ -14,11 +14,8 @@ export default class SettingsComponent extends Component {
             'key': 'Change Password',
         },
         {
-            'key': 'Paid checkouts',
-        },
-        {
-            'key': 'Unpaid checkouts',
-        },
+            'key': 'Upload Profile Image'
+        }
     ]
 
     render() {
@@ -42,12 +39,8 @@ export default class SettingsComponent extends Component {
         }else if(which === 'Change Password'){
             this.props.navigation.push('ChangePass');
 
-        }else if(which === 'Paid checkouts'){
-            this.props.navigation.push('PaidCK');
-        }
-        else if(which === 'Unpaid checkouts'){
-            this.props.navigation.push('UnPaidCK');
-
+        }else if(which === 'Upload Profile Image'){
+            this.props.navigation.push('ProfileImage');
         }
     }
 
@@ -90,23 +83,15 @@ export default class SettingsComponent extends Component {
                 type='material'/>
                 </View>
             )
-        }else if(item.key === 'Paid checkouts'){
+        }else if(item.key === 'Upload Profile Image'){
             return (
                 <View>
                 <Icon
-                name='shopping-basket'
+                name='perm-identity'
                 type='material'/>
                 </View>
             )
         }
-        else if(item.key === 'Unpaid checkouts'){
-            return (
-                <View>
-                <Icon
-                name='shopping-cart'
-                type='material'/>
-                </View>
-            )
-        }
+
     }
 }

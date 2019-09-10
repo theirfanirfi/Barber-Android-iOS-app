@@ -91,7 +91,7 @@ export default class ChatComponent extends Component {
           refereshFlatList: !this.state.refereshFlatList,
         });
       }else {
-        alert(res.message);
+       // alert(res.message);
       }
     })
     .catch(error => {

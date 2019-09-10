@@ -20,6 +20,7 @@ import BookingFormComponent from './src/components/Booking/BookingFormComponent'
 import MakeBookingComponent from './src/components/Booking/MakeBookingComponent';
 import MyBookingComponent from './src/components/Booking/MyBookingComponent';
 import ChatComponent from './src/components/Chat/ChatComponent';
+import ProfileImageComponent from './src/components/myaccount/ProfileImageComponent';
 export default class App extends Component {
 
 
@@ -43,15 +44,11 @@ const MainNavigator = createStackNavigator({
   ChangePass: {screen: ChangePasswordComponent},
   Checkout: {screen: CheckoutComponent},
   Main: {screen: MainComponent},
-  Web: {screen: WebViewComponent},
-  UnPaidCK: {screen: UnpaidCheckout},
-  PaidCK: {screen: PaidCheckoutsComponent},
-  UnPaidCKProducts: {screen: ProductsByUnPaidComponent},
-  PaidCKProducts: {screen: ProductsByPaidComponent},
   MakeBooking: {screen: MakeBookingComponent},
   BookingForm: {screen: BookingFormComponent},
   MyBooking: {screen: MyBookingComponent},
-  Chat: {screen: ChatComponent}
+  Chat: {screen: ChatComponent},
+  ProfileImage: {screen: ProfileImageComponent},
   },
   {
     initialRouteName: "Home"

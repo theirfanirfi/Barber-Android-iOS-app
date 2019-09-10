@@ -23,6 +23,7 @@ import GalleryComponent from '../Gallery/GalleryComponent';
 import MakeBookingComponent from '../Booking/MakeBookingComponent';
 import MyBookingComponent from '../Booking/MyBookingComponent';
 import ChatComponent from '../Chat/ChatComponent';
+import ProfileImageComponent from '../myaccount/ProfileImageComponent';
 
 export default class MainComponent extends React.Component{
   constructor(props){
@@ -79,17 +80,18 @@ export default class MainComponent extends React.Component{
   render () {
 
         const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar /> : <MainToolbar/>;
-        let loadComponent = <GalleryComponent navigation={this.props.navigation} />;
+        let loadComponent = <ProfileImageComponent navigation={this.props.navigation} />;
         if(this.state.activeTab === 'gallery'){
-          loadComponent = <GalleryComponent navigation={this.props.navigation} />;
+          // loadComponent = <GalleryComponent navigation={this.props.navigation} />;
+          loadComponent = <ProfileImageComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'makebooking'){
           loadComponent = <MakeBookingComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'chat'){
           loadComponent = <ChatComponent navigation={this.props.navigation}/>;
         }else if(this.state.activeTab === 'mybookings'){
           loadComponent = <MyBookingComponent navigation={this.props.navigation} />
-        }else if(this.state.activeTab === 'wishlist'){
-          loadComponent = <WishList navigation={this.props.navigation} />
+        }else if(this.state.activeTab === 'account'){
+          loadComponent = <SettingsComponent navigation={this.props.navigation} />
         }
 
     return (
