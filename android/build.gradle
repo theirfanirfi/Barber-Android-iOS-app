@@ -1,6 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
+    
     ext {
         buildToolsVersion = "28.0.3"
         minSdkVersion = 16
@@ -19,6 +21,10 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
+/**
+  + Project-wide Gradle configuration properties
+  */
 
 allprojects {
     repositories {

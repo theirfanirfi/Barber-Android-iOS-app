@@ -82,7 +82,7 @@ export default class MainComponent extends React.Component{
         const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar /> : <MainToolbar/>;
         let loadComponent = <ProfileImageComponent navigation={this.props.navigation} />;
         if(this.state.activeTab === 'gallery'){
-          // loadComponent = <GalleryComponent navigation={this.props.navigation} />;
+           //loadComponent = <GalleryComponent navigation={this.props.navigation} />;
           loadComponent = <ProfileImageComponent navigation={this.props.navigation} />;
         }else if(this.state.activeTab === 'makebooking'){
           loadComponent = <MakeBookingComponent navigation={this.props.navigation} />;
