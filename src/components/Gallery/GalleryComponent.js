@@ -39,7 +39,7 @@ returnHeight(){
         data={this.state.gallery}
         renderItem={({ item,index }) => {
             return (
-                <TouchableOpacity style={{ flex:1,flexDirection: 'column' }} onPress={() => this.callBackRes(item.id)}>
+                <TouchableOpacity style={{ flex:1,flexDirection: 'column' }} onPress={() => console.log(item.image_name)}>
             <View style={{ flex:1,flexDirection: 'column' }} >
              <Image source={{  uri: Base.getWebUrl()+'uploads/gallery/'+item.image_name}} style={style.image}/>
              <Text style={style.product_title}>{item.image_title}</Text>

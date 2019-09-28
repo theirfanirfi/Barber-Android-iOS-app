@@ -27,16 +27,7 @@ export default class ChatComponent extends Component {
     date: '',
     typeMessage: '',
     refereshFlatList: true,
-    messages: [
-      {
-        id: 1,
-        text: 'How are you?'
-      },
-      {
-        id: 2,
-        text: 'I am fine'
-      }
-    ],
+    messages: [],
     isLoggedIn: false,
     user:[],
 
@@ -148,6 +139,9 @@ async sendMessage() {
  }
 
   renderChat = ({item,i}) => {
+    // alert(this.state.messages.length);
+    // if(this.state.messages.length > 0){
+
     let user_id = this.state.user.id;
     let renderChat = <SenderChatView msgObj={item}  />
     if(item.sender_id == user_id){
@@ -161,6 +155,7 @@ async sendMessage() {
         {renderChat}
       </View>
     );
+   // }
 
   }
  
