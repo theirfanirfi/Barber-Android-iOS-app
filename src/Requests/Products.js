@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.10.7/Ecommerce/public/api/';
+const BASE_URL = 'http://192.168.10.3/Ecommerce/public/api/';
 
 export default {
     async fetchProducts(){
