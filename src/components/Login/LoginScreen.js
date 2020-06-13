@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Icon } from 'react-native-elements'
-import {View,StyleSheet,Text,Platform, Image,TouchableOpacity,TextInput} from 'react-native';
+import { View, StyleSheet, Text, Platform, Image, TouchableOpacity, TextInput } from 'react-native';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import PropTypes from 'prop-types';
 import Button from 'apsl-react-native-button';
@@ -8,29 +8,32 @@ import FormInput from '../../components/Reusable/FormInput';
 import Base from '../../Lib/Base';
 import AsyncStorage from '@react-native-community/async-storage';
 import Storage from '../../Lib/Storage';
+import * as Progress from 'react-native-progress';
 
 export default class LoginScreen extends Component {
 
     state = {
-        email: 'i@i.com',
-        password: 'irfan001',
+        email: '',
+        password: '',
         isLoading: false,
-        user: []
+        user: [],
+        progress_circle: false,
+
     }
 
     static navigationOptions = {
         header: null
-      }
-
-    callBack = (which,text) => {
-        if(which === 'email'){
-        this.setState({'email':text});
-    }else if(which === 'password'){
-        this.setState({'password':text});
-    }
     }
 
-    async componentDidMount(){
+    callBack = (which, text) => {
+        if (which === 'email') {
+            this.setState({ 'email': text });
+        } else if (which === 'password') {
+            this.setState({ 'password': text });
+        }
+    }
+
+    async componentDidMount() {
         // try{
         //     let u = await AsyncStorage.getItem('@user');
         //     let ju = JSON.parse(u);
@@ -44,35 +47,39 @@ export default class LoginScreen extends Component {
 
     }
 
-    makeLoginRequest(){
-        fetch(Base.getBaseUrl()+'login?email='+this.state.email+'&password='+this.state.password).then(res => res.json()).then(response => {
-          if(response.isError){
-              alert(response.message);
-          }else if(response.isLoggedIn){
-            this.setState({'user': response.user},() => {
-              this.storeData();
-              //  alert(this.state.user.name);
-              console.log('saved');
-              this.props.navigation.navigate('Main');
-            });
+    makeLoginRequest() {
+
+        this.setState({ progress_circle: true })
+
+        fetch(Base.getBaseUrl() + 'login?email=' + this.state.email + '&password=' + this.state.password).then(res => res.json()).then(response => {
+            if (response.isError) {
+                this.setState({ progress_circle: false });
+                alert(response.message);
+            } else if (response.isLoggedIn) {
+                this.setState({ 'user': response.user, progress_circle: false }, () => {
+                    this.storeData();
+                    //  alert(this.state.user.name);
+                    console.log('saved');
+                    this.props.navigation.navigate('Main');
+                });
 
 
 
-          }
+            }
         })
     }
 
     storeData = async () => {
         try {
-          await AsyncStorage.setItem('@user', JSON.stringify(this.state.user));
-          await AsyncStorage.setItem('@username', this.state.user.name);
-          await AsyncStorage.setItem('@token', this.state.user.token);
+            await AsyncStorage.setItem('@user', JSON.stringify(this.state.user));
+            await AsyncStorage.setItem('@username', this.state.user.name);
+            await AsyncStorage.setItem('@token', this.state.user.token);
         } catch (e) {
-          // saving error
-          console.log(e);
-          alert('Error occurred in saving the loggedin user. Please try again.');
+            // saving error
+            console.log(e);
+            alert('Error occurred in saving the loggedin user. Please try again.');
         }
-      }
+    }
 
     login = () => {
         // if(this.state.isLoading == false){
@@ -85,22 +92,27 @@ export default class LoginScreen extends Component {
         this.makeLoginRequest();
 
     }
-    gotoRegisterationScreen = () =>{
+    gotoRegisterationScreen = () => {
         this.props.navigation.navigate('Register');
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{  color:'black',fontSize:24 }}>Login</Text>
+                <Text style={{ color: 'black', fontSize: 24 }}>Login</Text>
+
+                {this.state.progress_circle &&
+                    <Progress.Circle size={30} indeterminate={true} style={{ alignSelf: 'center', margin: 8 }} />
+                }
+
                 <FormInput placeholder="Email" callBack={this.callBack} />
                 <FormInput ispassword={true} placeholder="Password" callBack={this.callBack} />
-                <Button onPress={this.login} style={{ backgroundColor: '#34D27C', marginTop:responsiveHeight(2),width: responsiveWidth(35),alignSelf:'center',color:'#fff'}} textStyle={{fontSize: 18}}>
-                    <Icon name="lock" type="material" iconStyle={{ color:'#fff' }}/>
-                    <Text style={{ color:'#fff' }}> Login</Text>
+                <Button onPress={this.login} style={{ backgroundColor: '#34D27C', marginTop: responsiveHeight(2), width: responsiveWidth(35), alignSelf: 'center', color: '#fff' }} textStyle={{ fontSize: 18 }}>
+                    <Icon name="lock" type="material" iconStyle={{ color: '#fff' }} />
+                    <Text style={{ color: '#fff' }}> Login</Text>
                 </Button>
                 <TouchableOpacity>
-                <Text onPress={ this.gotoRegisterationScreen} style={{ color:'blue' }}>Don't have ID? click to Register</Text>
+                    <Text onPress={this.gotoRegisterationScreen} style={{ color: 'blue' }}>Don't have ID? click to Register</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -109,12 +121,12 @@ export default class LoginScreen extends Component {
 
 const styles = StyleSheet.create({
 
-container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width:'100%',
-    height:'100%',
-    color:'black'
-}
+    container: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+        color: 'black'
+    }
 
 });

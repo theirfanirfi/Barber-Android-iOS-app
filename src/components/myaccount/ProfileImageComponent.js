@@ -96,6 +96,8 @@ export default class ProfileImageComponent extends Component {
       .then(res => {
 
         if (res.isError) {
+          this.setState({ progress_circle: false });
+
           alert(res.message);
 
         } else if (res.isChanged) {

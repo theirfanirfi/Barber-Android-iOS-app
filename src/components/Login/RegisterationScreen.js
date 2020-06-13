@@ -9,6 +9,9 @@ import Base from '../../Lib/Base';
 import AsyncStorage from '@react-native-community/async-storage';
 import Storage from '../../Lib/Storage';
 
+import * as Progress from 'react-native-progress';
+
+
 export default class RegisterationScreen extends Component {
 
   state = {
@@ -17,7 +20,8 @@ export default class RegisterationScreen extends Component {
     password: '',
     confirmpassword: '',
     isLoading: false,
-    user: []
+    user: [],
+    progress_circle: false,
   }
 
   static navigationOptions = {
@@ -40,15 +44,24 @@ export default class RegisterationScreen extends Component {
   }
 
   makeRegisterationRequest() {
+
+    this.setState({
+      progress_circle: true,
+    })
+
     fetch(Base.getBaseUrl() + 'register?email=' + this.state.email + '&password=' + this.state.password + '&cpass=' + this.state.confirmpassword + '&name=' + this.state.fullname)
       .then(res => res.json())
       .then(response => {
         console.log(response);
         if (response.isError) {
+          this.setState({ progress_circle: false });
           alert(response.message);
         } else if (response.isRegistered) {
           alert('Registered');
-          this.setState({ 'user': response.user }, () => {
+          this.setState({
+            'user': response.user,
+            progress_circle: false,
+          }, () => {
             this.storeData();
             console.log('saved');
           });
@@ -82,6 +95,10 @@ export default class RegisterationScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={{ color: 'black', fontSize: 24 }}>Register</Text>
+        {this.state.progress_circle &&
+          <Progress.Circle size={30} indeterminate={true} style={{ alignSelf: 'center', margin: 8 }} />
+        }
+
         <FormInput placeholder="Full Name" callBack={this.callBack} />
         <FormInput placeholder="Email" callBack={this.callBack} />
         <FormInput ispassword={true} placeholder="Password" callBack={this.callBack} />
