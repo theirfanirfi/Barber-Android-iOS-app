@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Alert } from 'react-native'
 import Dialog from "react-native-dialog";
-import { Dropdown } from 'react-native-material-dropdown';
+import { Dropdown } from 'react-native-material-dropdown-v2';
 import Button from 'apsl-react-native-button'
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import PropTypes from 'prop-types';
