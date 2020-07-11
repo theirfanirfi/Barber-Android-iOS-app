@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View,StyleSheet,Text,FlatList,Platform,TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, FlatList, Platform, TouchableOpacity } from 'react-native';
 import MainToolbar from '../Toolbar/MainToolbar';
 import IOSToolbar from '../Toolbar/IOSToolbar';
 import { Icon } from 'react-native-elements'
@@ -19,76 +19,76 @@ export default class SettingsComponent extends Component {
     ]
 
     render() {
-        const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar title="My account" navigation={this.props.navigation} /> : <IOSToolbar title="My account" navigation={this.props.navigation}/>;
+        const osBasedToolbar = Platform.OS === 'android' ? <MainToolbar title="My account" navigation={this.props.navigation} /> : <IOSToolbar title="My account" navigation={this.props.navigation} />;
         return (
             <View>
-             {osBasedToolbar}
-            <FlatList
-            data={this.settings}
-            renderItem={this.renderItem}
-            keyExtractor={(item,index) => index.toString()}
-            ItemSeparatorComponent={this.renderSeparator}
-            />
+                {osBasedToolbar}
+                <FlatList
+                    data={this.settings}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    ItemSeparatorComponent={this.renderSeparator}
+                />
             </View>
         )
     }
 
-    gotoPages(which){
-        if(which === 'Login Details'){
+    gotoPages(which) {
+        if (which === 'Login Details') {
             this.props.navigation.push('LoginDetails');
-        }else if(which === 'Change Password'){
+        } else if (which === 'Change Password') {
             this.props.navigation.push('ChangePass');
 
-        }else if(which === 'Upload Profile Image'){
+        } else if (which === 'Upload Profile Image') {
             this.props.navigation.push('ProfileImage');
         }
     }
 
-    renderItem = ({item,index}) => {
+    renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => {this.gotoPages(item.key)}}>
+            <TouchableOpacity onPress={() => { this.gotoPages(item.key) }}>
 
-            <View style={{ flex:1,flexDirection:'row',alignContent:'flex-start',margin:12 }}>
-            {this.renderIcon(item)}
+                <View style={{ flex: 1, flexDirection: 'row', alignContent: 'flex-start', margin: 12 }}>
+                    {this.renderIcon(item)}
 
-                <Text style={{ alignSelf:'flex-start',fontSize:responsiveFontSize(2.2),color:'#000',marginLeft: responsiveWidth(2) }}>{item.key}</Text>
-            </View>
+                    <Text style={{ alignSelf: 'flex-start', fontSize: responsiveFontSize(2.2), color: '#000', marginLeft: responsiveWidth(2) }}>{item.key}</Text>
+                </View>
             </TouchableOpacity>
 
         )
     }
 
-    renderSeparator = ({item,index}) => {
+    renderSeparator = ({ item, index }) => {
         return (
-        <View style={{ backgroundColor: '#000',height: 0.8}}>
-        </View>
+            <View style={{ backgroundColor: '#000', height: 0.8 }}>
+            </View>
         )
     }
 
     renderIcon = item => {
-        if(item.key === 'Login Details'){
+        if (item.key === 'Login Details') {
             return (
                 <View>
-                <Icon
-                name='account-box'
-                type='material'/>
+                    <Icon
+                        name='account-box'
+                        type='material' />
                 </View>
 
             )
-        }else if(item.key === 'Change Password'){
+        } else if (item.key === 'Change Password') {
             return (
                 <View>
-                <Icon
-                name='lock'
-                type='material'/>
+                    <Icon
+                        name='lock'
+                        type='material' />
                 </View>
             )
-        }else if(item.key === 'Upload Profile Image'){
+        } else if (item.key === 'Upload Profile Image') {
             return (
                 <View>
-                <Icon
-                name='perm-identity'
-                type='material'/>
+                    <Icon
+                        name='perm-identity'
+                        type='material' />
                 </View>
             )
         }
