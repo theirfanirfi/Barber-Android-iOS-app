@@ -47,7 +47,7 @@ export default class LoginScreen extends Component {
 
     }
 
-    makeLoginRequest() {
+    async makeLoginRequest() {
 
         this.setState({ progress_circle: true })
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { ToolbarAndroid, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import ToolbarAndroid from '@react-native-community/toolbar-android';
 import Storage from '../../Lib/Storage';
 export default class MainToolbar extends React.Component {
   static propTypes = {

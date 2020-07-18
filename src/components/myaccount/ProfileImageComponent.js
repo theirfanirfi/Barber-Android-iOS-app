@@ -10,7 +10,7 @@ import Base from '../../Lib/Base';
 import ImagePicker from 'react-native-image-picker';
 import base64 from 'react-native-base64'
 import AsyncStorage from '@react-native-community/async-storage';
-
+import * as axios from 'axios';
 import * as Progress from 'react-native-progress';
 
 export default class ProfileImageComponent extends Component {
@@ -76,42 +76,43 @@ export default class ProfileImageComponent extends Component {
       progress_circle: true,
     })
 
-    const profile_pic = {
+    let profile_pic = {
       name: this.state.imageUri.fileName,
       type: this.state.imageUri.type,
       path: this.state.imageUri.uri,
       uri: Platform.OS == 'android' ? this.state.imageUri.uri : this.state.imageUri.uri.replace("file://", ""),
     }
-
-    console.log(profile_pic);
     const formData = new FormData();
-    formData.append('image', profile_pic);
-    var request = {
-      method: 'POST',
-      body: formData
-    };
-
-    fetch(Base.getBaseUrl() + "user/updateprofilepic?token=" + this.state.user.token, request)
-      .then(response => response.json())
+    formData.append("image", profile_pic);
+    formData.append("tk", 'working');
+    const url = "http://192.168.10.5/barber/public/api/user/updateprofilepic?token=" + this.state.user.token;
+    axios.post(url, {
+      body: formData,
+      headers: {
+        'Accept': 'application/json',
+        'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+      }
+    })
+      // .then(response => response.json())
       .then(res => {
+        console.log(res.data);
+        // if (res.isError) {
+        //   this.setState({ progress_circle: false });
+        //   alert(res.message);
 
-        if (res.isError) {
-          this.setState({ progress_circle: false });
-          alert(res.message);
+        // } else if (res.isChanged) {
+        //   //
 
-        } else if (res.isChanged) {
-          //
+        //   this.setState({ 'user': res.user, progress_circle: false }, () => {
+        //     this.storeData().then(() => {
+        //       alert(res.message);
+        //     });
+        //   });
+        //   //
 
-          this.setState({ 'user': res.user, progress_circle: false }, () => {
-            this.storeData().then(() => {
-              alert(res.message);
-            });
-          });
-          //
-
-        } else {
-          alert(res.message);
-        }
+        // } else {
+        //   alert(res.message);
+        // }
       })
       .catch(error => {
         alert(error);
