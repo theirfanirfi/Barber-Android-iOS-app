@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 export default class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
-    this._bootstrapAsync();
+    // this._bootstrapAsync();
   }
 
   // Fetch the token from storage then navigate to our appropriate place
@@ -30,7 +30,7 @@ export default class AuthLoadingScreen extends Component {
       <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
         <ActivityIndicator />
         {/* <StatusBar barStyle="default" /> */}
-        <Text style={{ alignSelf: 'center' }}>Please wait...</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'gray', alignSelf: 'center', position: 'absolute', bottom: 30 }}>Powerd by TechGiantz</Text>
       </View>
     )
   }

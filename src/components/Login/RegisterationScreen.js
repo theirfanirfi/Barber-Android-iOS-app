@@ -49,7 +49,9 @@ export default class RegisterationScreen extends Component {
       progress_circle: true,
     })
 
-    fetch(Base.getBaseUrl() + 'createaccount?email=' + this.state.email + '&password=' + this.state.password + '&cpass=' + this.state.confirmpassword + '&name=' + this.state.fullname)
+    let url = Base.getBaseUrl() + 'createaccount?email=' + this.state.email + '&password=' + this.state.password + '&cpass=' + this.state.confirmpassword + '&name=' + this.state.fullname;
+    console.log(url)
+    fetch(url)
       .then(res => res.json())
       .then(response => {
         console.log(response);

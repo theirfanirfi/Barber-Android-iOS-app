@@ -44,15 +44,15 @@ export default class BottomNav extends Component {
       key: 'chat',
       icon: 'message',
       label: 'Chat',
-      barColor: '#E64A19',
-      pressColor: 'rgba(255, 255, 255, 0.16)'
+      barColor: 'purple',
+      pressColor: 'purple'
     },
     {
       key: 'account',
       icon: 'perm-identity',
       label: 'My Account',
-      barColor: '#E64A19',
-      pressColor: 'rgba(255, 255, 255, 0.16)'
+      barColor: 'navy',
+      pressColor: 'navy'
     },
   ]
 

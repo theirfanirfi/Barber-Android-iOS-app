@@ -70,13 +70,13 @@ export default class ProfileImageComponent extends Component {
     }
   }
 
-  async uploadImage() {
+  uploadImage() {
 
     this.setState({
       progress_circle: true,
     })
 
-    let profile_pic = {
+    const profile_pic = {
       name: this.state.imageUri.fileName,
       type: this.state.imageUri.type,
       path: this.state.imageUri.uri,
@@ -84,35 +84,34 @@ export default class ProfileImageComponent extends Component {
     }
     const formData = new FormData();
     formData.append("image", profile_pic);
-    formData.append("tk", 'working');
-    const url = "http://192.168.10.5/barber/public/api/user/updateprofilepic?token=" + this.state.user.token;
-    axios.post(url, {
+    const url = "http://127.0.0.1/barber/public/api/user/updateprofilepic?token=" + this.state.user.token;
+    fetch(url, {
+      method: 'POST',
       body: formData,
       headers: {
-        'Accept': 'application/json',
-        'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+        "Accept": "application/json",
+        "Content-Type": "multipart/form-data"
       }
     })
-      // .then(response => response.json())
+      .then(response => response.json())
       .then(res => {
-        console.log(res.data);
-        // if (res.isError) {
-        //   this.setState({ progress_circle: false });
-        //   alert(res.message);
+        if (res.isError) {
+          this.setState({ progress_circle: false });
+          alert(res.message);
 
-        // } else if (res.isChanged) {
-        //   //
+        } else if (res.isChanged) {
+          //
 
-        //   this.setState({ 'user': res.user, progress_circle: false }, () => {
-        //     this.storeData().then(() => {
-        //       alert(res.message);
-        //     });
-        //   });
-        //   //
+          this.setState({ 'user': res.user, progress_circle: false }, () => {
+            this.storeData().then(() => {
+              alert(res.message);
+            });
+          });
+          //
 
-        // } else {
-        //   alert(res.message);
-        // }
+        } else {
+          alert(res.message);
+        }
       })
       .catch(error => {
         alert(error);

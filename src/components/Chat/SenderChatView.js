@@ -14,14 +14,14 @@ export default class SenderChatView extends Component {
         isLoggedIn: false,
         user: [],
     }
-    constructor(props){
+    constructor(props) {
         super(props);
         Storage.isLoggedIn(this);
         this.mTime = '0min';
 
     }
 
-    calculateTimeDiff(){
+    calculateTimeDiff() {
         let nowTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
         var result = timediff(this.props.msgObj.msg_send_time, nowTime, 'YDHms');
         // console.log(result);
@@ -29,71 +29,74 @@ export default class SenderChatView extends Component {
 
 
 
-        if(result.years > 0){
-            ago += result.years+" Years ";
-        }
-        
-        if(result.months && result.months > 0){
-            ago += result.months+" mon ";
+        if (result.years > 0) {
+            ago += result.years + " Years ";
         }
 
-        if(result.days > 0){
-            ago += result.days+' d ';
+        if (result.months && result.months > 0) {
+            ago += result.months + " mon ";
+        }
+
+        if (result.days > 0) {
+            ago += result.days + ' d ';
 
         }
 
-        if(result.hours && result.hours > 0){
-            ago += result.hours+" h ";
+        if (result.hours && result.hours > 0) {
+            ago += result.hours + " h ";
         }
 
-        if(result.minutes > 0){
-            ago += result.minutes+' min ';
+        if (result.minutes > 0) {
+            ago += result.minutes + ' min ';
 
-        }else {
+        } else {
             ago += " 0min";
         }
-        ago+=" ago";
-this.mTime = ago;
+        ago += " ago";
+        this.mTime = ago;
         return ago;
     }
 
-    showAlternate(action='summarryoftime'){
-        if(action == 'summarryoftime'){
+    showAlternate(action = 'summarryoftime') {
+        if (action == 'summarryoftime') {
             this.mTime = this.calculateTimeDiff();
-        }else {
-            this.mTime =  this.props.msgObj.msg_send_time;
+        } else {
+            this.mTime = this.props.msgObj.msg_send_time;
         }
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
         this.showAlternate();
     }
 
     render() {
-        return ( 
-<View style={{marginTop:20}}>
-    <Text onPress={() => {
-                this.showAlternate('actualtime')}}  style={{alignSelf:'flex-end',marginRight:10,fontSize:10,color:'gray'}}>{this.mTime}</Text>
+        return (
+            <View style={{ marginTop: 20 }}>
+                <Text onPress={() => {
+                    this.showAlternate('actualtime')
+                }} style={{ alignSelf: 'flex-end', marginRight: 10, fontSize: 10, color: 'gray' }}>{this.mTime}</Text>
 
-            <View style={{alignSelf:'flex-end', alignItems:'flex-end',flexDirection:'row'}}>
+                <View style={{ alignSelf: 'flex-end', alignItems: 'flex-end', flexDirection: 'row' }}>
 
-          
-<View style={style.view}>
 
-                <Text style={style.text}>
-                    {this.props.msgObj.msg}
-                </Text>
+                    <View style={style.view}>
 
-                
-</View>
-                <Image
-        
-        source={{uri: this.state.user.profile_image}}
-        style={{width: 40, height: 40,borderRadius:20,alignSelf:'flex-end'}}
-      />
-           
+                        <Text style={style.text}>
+                            {this.props.msgObj.msg}
+                        </Text>
 
-            </View>
+
+                    </View>
+                    {this.state.user.profile_image != "" &&
+                        <Image
+
+                            source={{ uri: this.state.user.profile_image }}
+                            style={{ width: 40, height: 40, borderRadius: 20, alignSelf: 'flex-end' }}
+                        />
+                    }
+
+
+                </View>
             </View>
 
         );
@@ -101,18 +104,18 @@ this.mTime = ago;
 }
 
 const style = StyleSheet.create({
-view: {
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
-    flexDirection:'row',
-    backgroundColor: 'blue',
-    borderRadius: 20,
-    borderBottomRightRadius: 0,
-    padding: 10,
-    margin: 8,
-},
-text : {
+    view: {
+        alignSelf: 'flex-end',
+        alignItems: 'flex-end',
+        flexDirection: 'row',
+        backgroundColor: 'blue',
+        borderRadius: 20,
+        borderBottomRightRadius: 0,
+        padding: 10,
+        margin: 8,
+    },
+    text: {
 
-    color: 'white',
-}
+        color: 'white',
+    }
 });

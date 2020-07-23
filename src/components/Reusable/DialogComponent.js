@@ -54,11 +54,12 @@ export default class DilogComponent extends Component {
 
     if (this.state.isLoggedIn) {
       // alert(this.props.day+ " : "+this.props.month+" : "+this.props.year+" : "+this.props.timing_id+" : "+this.state.selectedServiceId);
-
-      fetch(Base.getBaseUrl() + "user/bookappointment?day=" + this.props.day +
+      let url = Base.getBaseUrl() + "user/bookappointment?day=" + this.props.day +
         "&month=" + this.props.month +
         "&year=" + this.props.year +
-        "&time=" + this.props.timing_id + "&token=" + this.state.user.token + "&service_id=" + this.state.selectedServiceId)
+        "&time=" + this.props.timing_id + "&token=" + this.state.user.token + "&service_id=" + this.state.selectedServiceId
+      console.log(url)
+      fetch(url)
         .then((res) => res.json()).then(response => {
           if (response.isError) {
             alert(response.message);

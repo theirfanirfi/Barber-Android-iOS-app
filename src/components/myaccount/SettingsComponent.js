@@ -12,9 +12,6 @@ export default class SettingsComponent extends Component {
         },
         {
             'key': 'Change Password',
-        },
-        {
-            'key': 'Upload Profile Image'
         }
     ]
 
