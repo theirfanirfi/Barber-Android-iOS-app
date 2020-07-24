@@ -5,10 +5,11 @@ import {
   StyleSheet,
   Text,
   View,
+  Image
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
-
+const logo = require('./../../images/logo.png');
 export default class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
@@ -27,10 +28,9 @@ export default class AuthLoadingScreen extends Component {
   render() {
     return (
 
-      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
-        <ActivityIndicator />
-        {/* <StatusBar barStyle="default" /> */}
-        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'gray', alignSelf: 'center', position: 'absolute', bottom: 30 }}>Powerd by TechGiantz</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: '#E4DAF0' }}>
+        <Image source={logo} style={{ width: '72%', alignSelf: 'center' }} />
+        <Text style={{ fontWeight: 'bold', fontSize: 16, color: 'gray', alignSelf: 'center', position: 'absolute', bottom: 30 }}>Powered by TechGiantz</Text>
       </View>
     )
   }
