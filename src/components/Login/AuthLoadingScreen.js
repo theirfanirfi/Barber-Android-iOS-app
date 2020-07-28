@@ -14,6 +14,7 @@ export default class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
     // this._bootstrapAsync();
+    setTimeout(() => this._bootstrapAsync(), 5000);
   }
 
   // Fetch the token from storage then navigate to our appropriate place

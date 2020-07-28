@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Platform, Image, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, Image, StyleSheet, KeyboardAvoidingView, Button } from 'react-native';
 import ReversedFlatList from 'react-native-reversed-flat-list';
 import Base from '../../Lib/Base';
 import Storage from '../../Lib/Storage';
@@ -10,6 +10,7 @@ import RecieverChatView from './RecieverChatView';
 import SenderChatView from './SenderChatView';
 import { TextInput, FlatList } from 'react-native-gesture-handler';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 
 
 
@@ -43,7 +44,7 @@ export default class ChatComponent extends Component {
         .then(response => response.json())
         .then(res => {
           if (res.isError) {
-            alert(res.message);
+            // alert(res.message);
           } else if (res.isFound) {
             this.setState({
               messages: res.messages.reverse()
@@ -76,7 +77,7 @@ export default class ChatComponent extends Component {
       .then(response => response.json())
       .then(res => {
         if (res.isError) {
-          alert(res.message);
+          //  alert(res.message);
         } else if (res.isFound) {
           this.setState({
             messages: res.messages.reverse(),
@@ -183,13 +184,11 @@ export default class ChatComponent extends Component {
           value={this.state.typeMessage}
           onChangeText={(text) => this.setState({ typeMessage: text })}
           rightIcon={
-            <Icon
-              name='send'
-              type='material'
-              size={24}
-              color='black'
+            <Button
+              title="send"
               onPress={() => this.sendMessage()}
-            />
+            >
+            </Button>
 
           }
         />

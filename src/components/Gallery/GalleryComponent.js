@@ -3,20 +3,40 @@ import { View, Text, TouchableOpacity, FlatList, Platform, Image, StyleSheet } f
 import Base from '../../Lib/Base';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { Button } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export default class GalleryComponent extends Component {
 
     state = {
         gallery: [],
-        columns: 1
+        columns: 1,
+        icon_name: 'bars'
     }
 
-    onSwipeUp(gestureState) {
-        this.setState({ columns: 1 });
+    icon() {
+        if (this.state.icon_name == 'bars') {
+            return 'th-large';
+        } else {
+            return 'bars';
+        }
     }
 
-    onSwipeDown(gestureState) {
-        this.setState({ columns: 2 });
+    listOrThumbnail() {
+        if (this.state.columns == 1) {
+            return 2;
+        } else {
+            return 1;
+        }
 
+    }
+
+
+
+    changeGalleryStyle() {
+        this.setState({
+            columns: this.listOrThumbnail(),
+            icon_name: this.icon()
+        })
     }
 
     async componentDidMount() {
@@ -43,9 +63,7 @@ export default class GalleryComponent extends Component {
 
     render() {
         return (
-            <GestureRecognizer
-                onSwipeUp={(state) => this.onSwipeUp(state)}
-                onSwipeDown={(state) => this.onSwipeDown(state)}
+            <View
             >
                 <FlatList
                     data={this.state.gallery}
@@ -66,7 +84,14 @@ export default class GalleryComponent extends Component {
                     keyExtractor={(item, index) => index.toString()}
                     style={{ marginBottom: responsiveHeight(10), marginTop: this.returnHeight() }}
                 />
-            </GestureRecognizer>
+                <TouchableOpacity style={{ position: 'absolute', top: 10, left: 5 }}>
+
+                    <Button onPress={() => this.changeGalleryStyle()} style={{ backgroundColor: '#388E3C' }} >
+                        <Icon name={this.state.icon_name} size={24} color="#fff" />
+                    </Button>
+                </TouchableOpacity>
+
+            </View>
         );
     }
 }
